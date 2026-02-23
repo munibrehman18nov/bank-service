@@ -1,10 +1,9 @@
 package io.munib.service.impl;
 
-import io.munib.common.ResponseCode;
-import io.munib.error.APIException;
 import io.munib.logging.LogProperties;
 import io.munib.service.LoggerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,6 +11,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LoggerServiceImpl implements LoggerService {
@@ -34,11 +34,7 @@ public class LoggerServiceImpl implements LoggerService {
                     .timeout(Duration.ofMillis(props.timeoutMs()))
                     .block();
         } catch (Exception e) {
-            throw new APIException(
-                    ResponseCode.EXTERNAL_SERVICE_ERROR,
-                    "External logging call failed",
-                    e
-            );
+            log.error("External logging call failed", e);
         }
     }
 }

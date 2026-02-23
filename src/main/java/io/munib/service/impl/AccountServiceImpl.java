@@ -74,10 +74,10 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public BalanceResponse debit(Long accountId, Currency currency, long amountMinor) {
+        logger.log("debit request: accountId=" + accountId + ", currency=" + currency + ", amountMinor=" + amountMinor);
         if (amountMinor <= 0) {
             throw new APIException(ResponseCode.INVALID_REQUEST, "Amount must be > 0");
         }
-        logger.log("Amount must be > 0");
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new APIException(ResponseCode.RESOURCE_NOT_FOUND, "Account not found: " + accountId));
         AccountBalance bal = account.getOrCreateBalance(currency);
